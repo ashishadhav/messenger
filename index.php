@@ -140,26 +140,38 @@
 <script type="text/javascript">
 var msginput = document.getElementById("msginput");
 var msgarea = document.getElementById("msg-area");
+
+//sets cookie to prevent opening the login name
 function chooseusername() {
 	var user = document.getElementById("cusername").value;
-	document.cookie="messengerUname=" + user
+	document.cookie="mUname=" + user
 	checkcookie()
 }
+
+
+//displays the login page 
 function showlogin() {
 	document.getElementById("whitebg").style.display = "inline-block";
 	document.getElementById("loginbox").style.display = "inline-block";
 }
+
+//hides the login page
 function hideLogin() {
 	document.getElementById("whitebg").style.display = "none";
 	document.getElementById("loginbox").style.display = "none";
 }
+
+//check if cookie set 
+//-1 means cookie not set
+//if set hidelogin
 function checkcookie() {
-	if (document.cookie.indexOf("messengerUname") == -1) {
+	if (document.cookie.indexOf("mUname") == -1) {
 		showlogin();
 	} else {
 		hideLogin();
 	}
 }
+
 function getcookie(cname) {
     var name = cname + "=";
     var ca = document.cookie.split(';');
