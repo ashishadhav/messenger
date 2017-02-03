@@ -192,46 +192,61 @@ function escapehtml(text) {
 }
 function update() {
 	var xmlhttp=new XMLHttpRequest();
-	var username = getcookie("messengerUname");
+	var username = getcookie("mUname");
 	var output = "";
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+				//get individual message , separated by new line
 				var response = xmlhttp.responseText.split("\n")
 				var rl = response.length
 				var item = "";
 				for (var i = 0; i < rl; i++) {
 					item = response[i].split("\\")
-					if (item[1] != undefined) {
+						if (item[1] != undefined) {
+						// blue messages	
 						if (item[0] == username) {
 							output += "<div class=\"msgc\" style=\"margin-bottom: 30px;\"> <div class=\"msg msgfrom\">" + item[1] + "</div> <div class=\"msgarr msgarrfrom\"></div> <div class=\"msgsentby msgsentbyfrom\">Sent by " + item[0] + "</div> </div>";
 						} else {
+							//grey messages
 							output += "<div class=\"msgc\"> <div class=\"msg\">" + item[1] + "</div> <div class=\"msgarr\"></div> <div class=\"msgsentby\">Sent by " + item[0] + "</div> </div>";
 						}
 					}
 				}
+
+				//set the output to the area
 				msgarea.innerHTML = output;
+				//if scrolling push scrollbar at the bottom
 				msgarea.scrollTop = msgarea.scrollHeight;
 			}
 		}
+		//call get-messages to populate messages from database
 	      xmlhttp.open("GET","get-messages.php?username=" + username,true);
 	      xmlhttp.send();
 }
+
+// sends an ajax request to our server
 function sendmsg() {
 	var message = msginput.value;
 	if (message != "") {
 		// alert(msgarea.innerHTML)
 		// alert(getcookie("messengerUname"))
-		var username = getcookie("messengerUname");
+		var username = getcookie("mUname");
 		var xmlhttp=new XMLHttpRequest();
+		//anonymous function
 		xmlhttp.onreadystatechange=function() {
+			//run this only after u send the request and get a reply
 			if (xmlhttp.readyState==4 && xmlhttp.status==200) {
 				message = escapehtml(message)
-				msgarea.innerHTML += "<div class=\"msgc\" style=\"margin-bottom: 30px;\"> <div class=\"msg msgfrom\">" + message + "</div> <div class=\"msgarr msgarrfrom\"></div> <div class=\"msgsentby msgsentbyfrom\">Sent by " + username + "</div> </div>";
+					//this is for formatting
+					msgarea.innerHTML += "<div class=\"msgc\" style=\"margin-bottom: 30px;\"> <div class=\"msg msgfrom\">" + message + "</div> <div class=\"msgarr msgarrfrom\"></div> <div class=\"msgsentby msgsentbyfrom\">Sent by " + username + "</div> </div>";
 				msginput.value = "";
 			}
 		}
-	      xmlhttp.open("GET","update-messages.php?username=" + username + "&message=" + message,true);
-	      xmlhttp.send();
+
+		//actually call our server to set messages in our DB
+	      	xmlhttp.open("GET","update-messages.php?username=" + username + "&message=" + message,true);
+		//send our request
+		xmlhttp.send();
   	}
 }
 setInterval(function(){ update() }, 2500);
