@@ -1,6 +1,6 @@
 <?php
 
-$db = new mysqli("us-cdbr-iron-east-04.cleardb.net","b9f2685c23460a","ccecffbb","heroku_027762730c360f1" );
+$db = new mysqli("","","","" );
 
 if ( $db->connect_error) {
 	die("Could not connect to DB");
