@@ -249,6 +249,8 @@ function sendmsg() {
 		xmlhttp.send();
   	}
 }
+
+//auto update the chat window
 setInterval(function(){ update() }, 2500);
 </script>
 </body>
